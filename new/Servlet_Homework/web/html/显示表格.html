@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>显示表格</title>
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    $.ajax({
+        url:"http://localhost:8080/json",
+        type:'GET',
+        dataType:'JSONP',  // 处理Ajax跨域问题
+        success: function(data){
+            $('body').append( "Name: " + data );
+        }
+    });
+    $.get("http://localhost:8080/json",function (jsondata,status) {
+        if(status == "success"){
+            console.log(jsondata);
+        }
+    })
+</script>
+</html>

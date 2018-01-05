@@ -1,0 +1,46 @@
+# 1,查询收藏了两本书以上的用户的姓名与居住的城市.
+use homw;
+SELECT uname,loc FROM (
+  SELECT count(bkid) 藏书量,uname,loc
+  FROM hw_user h INNER JOIN u_coll_bk u ON h.uid = u.uid
+  GROUP BY uname
+) AS b WHERE 藏书量 > 2;
+
+# 2,查询年龄在三十到六十之间的用户的姓名,评论过的书籍名称
+SELECT uname ,bkname
+FROM hw_user
+  LEFT OUTER JOIN comment ON hw_user.uid = comment.uid
+  LEFT OUTER JOIN book ON comment.bkid = book.bkid
+WHERE age > 30 AND age < 60 ;
+
+# 3,每个用户在2016年之前的评论数量
+SELECT
+  uname,
+  count(content) 评论数量
+FROM comment
+  LEFT OUTER JOIN hw_user ON comment.uid = hw_user.uid
+WHERE datetime < '2016-01-01 00:00:00'GROUP BY uname;
+# 4,查询刘青云评论过的书籍id及评论的次数
+SELECT
+  bkid,
+  count(bkid)
+FROM comment
+  LEFT OUTER JOIN hw_user ON comment.uid = hw_user.uid
+WHERE uname = '刘青云'
+GROUP BY bkid;
+
+#5,查询收藏了书籍飞升之
+# 后的用户且年龄大于用户平均年龄5岁的用户的详细信息.
+UPDATE hw_user set age = 90 WHERE uname='无敌';
+SELECT * from hw_user;
+
+SELECT
+  uname,
+  age,
+  loc
+FROM hw_user
+  LEFT OUTER JOIN comment ON hw_user.uid = comment.uid
+  LEFT OUTER JOIN book ON comment.bkid = book.bkid
+WHERE bkname = '飞升之后' AND age > (SELECT avg(age)
+                                 FROM hw_user) + 5;
+
